@@ -191,7 +191,7 @@ def grid_search_logistic_regression(X, y, param_grid, test_size=0.1):
             best_accuracy = acc
             best_params = params
 
-    print(f"\n✅ Best Params: {best_params} → Accuracy: {best_accuracy:.4f}")
+    print(f"\nBest Params: {best_params} → Accuracy: {best_accuracy:.4f}")
     return best_params, best_accuracy
 
 def compute_confusion_matrix(y_true, y_pred):
@@ -229,14 +229,14 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test = train_test_split_manual(X, y, test_size=0.1, random_state=11)
     end_prep_time = time.time()
-    print(f"\n🕒 Preprocessing Time: {end_prep_time - start_prep_time:.4f} seconds")
+    print(f"\nPreprocessing Time: {end_prep_time - start_prep_time:.4f} seconds")
 
     # ---------- Training ----------
     start_exec_time = time.time()
     param_grid = {'lr': [0.0025],'lambda_reg': [0.1],'beta': [0.97],'batch_size': [50],'epochs': [50],'degree': [5]}
     best_params, best_acc = grid_search_logistic_regression(X, y, param_grid)
     end_exec_time = time.time()
-    print(f"\n🕒 Training Time: {end_exec_time - start_exec_time:.4f} seconds")
+    print(f"\nTraining Time: {end_exec_time - start_exec_time:.4f} seconds")
 
     # ---------- Set the model ----------
     X_train_phi = PHI(X_train, best_params['degree'])
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     accuracy = np.mean(y_pred == y_test)
     print(f"\nTest Accuracy: {accuracy:.4f}")
     end_total_time = time.time()
-    print(f"\n🕒 Total Time: {end_total_time - start_total_time:.4f} seconds")
+    print(f"\nTotal Time: {end_total_time - start_total_time:.4f} seconds")
 
     # ---------- Results ----------
     cm = compute_confusion_matrix(y_test, y_pred)
