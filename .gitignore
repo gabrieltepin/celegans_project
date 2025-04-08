@@ -2,3 +2,4 @@ venv
 Celegans_ModelGen
 MNIST
 .vscode
+test_celegans

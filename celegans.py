@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 import os
 import time
+import pickle
 import seaborn as sns
 
 np.random.seed(11)
@@ -57,8 +58,6 @@ def load_celegans_design_matrix(image_paths: dict, img_size=(25, 25), max_per_cl
     X = np.hstack((X, np.ones((X.shape[0], 1))))  # Add bias term as last feature
     return X, y
 
-import numpy as np
-
 def train_test_split_manual(X, y, test_size=0.1, random_state=None):
     n_samples = len(X)
     if isinstance(test_size, float):
@@ -80,7 +79,6 @@ def train_test_split_manual(X, y, test_size=0.1, random_state=None):
 
     return X_train, X_test, y_train, y_test
 
-
 def pca(X, n_components=50):
     bias = X[:, -1].reshape(-1, 1)      
     X_no_bias = X[:, :-1]              
@@ -99,7 +97,7 @@ def pca(X, n_components=50):
     principal_components = eigenvectors_sorted[:, :n_components]  
 
     X_reduced = np.dot(X_centered, principal_components)          
-    X_pca = np.hstack((X_reduced, bias))   # shape (n_amostras, n_components + 1)
+    X_pca = np.hstack((X_reduced, bias)) 
 
     return X_pca, principal_components, mean_vec
 
@@ -144,7 +142,7 @@ def normalize_features(X):
     return X_norm, mean, std
 
 def PHI(X, m):
-    X_ = X[:, :-1]  # remove last column (bias)
+    X_ = X[:, :-1]          # remove last column (bias)
     bias = X[:, -1:]        # save bias to reattach
 
     features = [X_**d for d in range(1, m + 1)]
@@ -269,3 +267,16 @@ if __name__ == "__main__":
     plt.ylabel("True")
     plt.title("Confusion Matrix")
     plt.show()
+
+    # ---------- Saving the model ----------
+    model_dict = {
+        'w': w,
+        'pcs': pcs,
+        'mean_pca': mean_pca,
+        'mean_train': mean_train,
+        'std_train': std_train,
+        'phi_degree': best_params['degree']
+    }
+
+    with open("celegans_model.pkl", "wb") as f:
+        pickle.dump(model_dict, f)
