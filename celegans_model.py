@@ -4,10 +4,6 @@ import os
 from PIL import Image
 import pandas as pd
 
-###############################
-#   Auxiliary Functions       #
-###############################
-
 def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
@@ -68,10 +64,6 @@ def apply_pca(X, pcs, mean_pca):
     return np.hstack((X_pca, bias))
 
 
-############################
-#   Main Celegans Script  #
-############################
-
 if __name__ == "__main__":
     # --- Load the trained model parameters ----
     with open("celegans_model.pkl", "rb") as f:
@@ -96,37 +88,29 @@ if __name__ == "__main__":
         print("No images to classify. Exiting.")
         exit(0)
 
-    # 3) Apply the same PCA used in training
     X_pca = apply_pca(X_raw, pcs, mean_pca)
 
-    # 4) Apply the same PHI expansion
     X_phi = PHI(X_pca, phi_degree)
 
-    # 5) Normalize using the training set's mean/std
     X_features = X_phi[:, :-1]
     X_bias = X_phi[:, -1:]
     X_features = (X_features - mean_train) / std_train
     X_final = np.hstack((X_features, X_bias))
 
-    # 6) Predict classes
     y_pred = predict_class(X_final, w)
 
-    # 7) Prepare a DataFrame with columns [image_name, label]
     data = {
         "image_name": [os.path.basename(p) for p in img_paths],
         "label": y_pred
     }
     df = pd.DataFrame(data)
 
-    # 8) Count the labels 0/1 and append summary rows to the bottom
     num_label_0 = (y_pred == 0).sum()
     num_label_1 = (y_pred == 1).sum()
 
-    # Append as extra rows
     df.loc[len(df)] = ["TOTAL label 0", num_label_0]
     df.loc[len(df)] = ["TOTAL label 1", num_label_1]
 
-    # 9) Save to Excel file
     output_file = "celegans_result.xlsx"
     df.to_excel(output_file, index=False)
 

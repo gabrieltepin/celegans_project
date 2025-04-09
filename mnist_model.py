@@ -105,33 +105,7 @@ if __name__ == "__main__":
         base_path = input("Enter the path to the mnist files to classify: ").strip()
     # base_path = "test_mnist"  # folder with new .png images
 
-    # --- Load and preprocess images ---
-    # images = _load_idx_images(base_path)
     images, names = load_tif_images_from_folder(base_path)
-    # X_hog = hog_batch(images, **hog_params)
-    # X_norm = (X_hog - mean_feat) / std_feat
-
-    # # --- Predict ---
-    # y_pred = predict(X_norm, W, b)
-
-    # # --- Output predictions ---
-    # base_names = [f"img_{i}.png" for i in range(len(y_pred))]
-    # df = pd.DataFrame({
-    #     "image_name": base_names,
-    #     "label": y_pred
-    # })
-
-    # # Add totals per class
-    # value_counts = df["label"].value_counts().sort_index()
-    # for i in range(10):
-    #     total = value_counts.get(i, 0)
-    #     df.loc[len(df)] = [f"TOTAL label {i}", total]
-
-    # # Save results
-    # output_file = "mnist_results.xlsx"
-    # df.to_excel(output_file, index=False)
-
-    # print(f"\nClassification complete. Results saved to {output_file}")
     if len(images) == 0:
         print("No .tif images found. Exiting.")
         exit(0)
@@ -139,7 +113,6 @@ if __name__ == "__main__":
     X_hog = hog_batch(images, **hog_params)
     X_norm = (X_hog - mean_feat) / std_feat
 
-    # --- Predict ---
     y_pred = predict(X_norm, W, b)
 
     # --- Output predictions ---
