@@ -99,11 +99,11 @@ if __name__ == "__main__":
     hog_params = model["hog_params"]
 
     # --- Ask user for test file ---
-    # base_path = input("Enter the path to the .idx3-ubyte file to classify: ").strip()
-    # while not os.path.isfile(base_path):
-    #     print("That file doesn't exist. Try again.")
-    #     base_path = input("Enter the path to the .idx3-ubyte file to classify: ").strip()
-    base_path = "test_mnist"  # folder with new .png images
+    base_path = input("Enter the path to the mnist files to classify: ").strip()
+    while not os.path.isdir(base_path):
+        print("That path doesn't exist. Try again.")
+        base_path = input("Enter the path to the mnist files to classify: ").strip()
+    # base_path = "test_mnist"  # folder with new .png images
 
     # --- Load and preprocess images ---
     # images = _load_idx_images(base_path)
@@ -155,6 +155,6 @@ if __name__ == "__main__":
         df.loc[len(df)] = [f"TOTAL label {i}", total]
 
     # Save results
-    output_file = "mnist_tif_results.xlsx"
+    output_file = "mnist_results.xlsx"
     df.to_excel(output_file, index=False)
     print(f"\nClassification complete. Results saved to {output_file}")
