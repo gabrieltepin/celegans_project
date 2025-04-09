@@ -236,7 +236,7 @@ if __name__ == "__main__":
     end_exec_time = time.time()
     print(f"\nTraining Time: {end_exec_time - start_exec_time:.4f} seconds")
 
-    # ---------- Set the model ----------
+    # ---------- Evaluate ----------
     X_train_phi = PHI(X_train, best_params['degree'])
     X_test_phi = PHI(X_test, best_params['degree'])
     X_train_phi, mean_train, std_train = normalize_features(X_train_phi)
@@ -260,7 +260,7 @@ if __name__ == "__main__":
     end_total_time = time.time()
     print(f"\nTotal Time: {end_total_time - start_total_time:.4f} seconds")
 
-    # ---------- Results ----------
+    # ---------- Confusion Martix ----------
     cm = compute_confusion_matrix(y_test, y_pred)
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
     plt.xlabel("Predicted")
